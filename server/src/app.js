@@ -21,9 +21,11 @@ app.use(cookieParser());
 
 // Routes import 
 import userRoutes from "./routes/user.routes.js"
+import companyRoutes from "./routes/company.routes.js"
 
 //Routes declaration
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/company", companyRoutes);
 
 
 export { app };
