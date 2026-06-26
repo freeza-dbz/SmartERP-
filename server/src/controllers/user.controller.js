@@ -8,43 +8,35 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import { generateAccessToken } from "../utils/jwt.js"
 
 const register = asyncHandler(async (req, res) => {
-    try {
-        const user = await registerUser(req.body)
+    const user = await registerUser(req.body)
 
-        return res
-            .status(201)
-            .json(
-                new ApiResponse(
-                    201,
-                    user,
-                    "User created successfully"
-                )
+    // const createdUser = { id: user.id, name: user.fullName, email: user.email };
+
+    return res
+        .status(201)
+        .json(
+            new ApiResponse(
+                201,
+                user,
+                "User created successfully"
             )
-
-    } catch (error) {
-
-        return ApiError(400, error, "Error occured during user registration")
-
-    }
+        )
 })
 
 const login = asyncHandler(async (req, res) => {
+    const user = await loginUser(req.body);
 
-    try {
-        const user = await loginUser(req.body);
+    const token = generateAccessToken(user);
 
-        const token = generateAccessToken(user.id);
+    const loggedInUser = { id: user.id, name: user.fullName, email: user.email, username: user.username };
 
-        return res
-            .status(201)
-            .ApiResponse(
-                201,
-                user,
-                "User login successfull"
-            )
-    } catch (error) {
-        return ApiError(404, error, "Error occurred during logging user")
-    }
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            { user: loggedInUser, token },
+            "User login successful"
+        ))
 })
 
 

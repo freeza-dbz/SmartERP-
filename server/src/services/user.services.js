@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt"
-import prisma from "../db/index.js"
+import { prisma } from "../db/index.js"
 import { ApiError } from "../utils/ApiErrors.js"
-import { asyncHandler } from "../utils/asyncHandler.js"
 
-const registerUser = asyncHandler(async ({ fullName, username, email, password }) => {
+const registerUser = async ({ fullName, username, email, password }) => {
     const existingUser = await prisma.users.findUnique({
         where: {
             email,
@@ -19,17 +18,16 @@ const registerUser = asyncHandler(async ({ fullName, username, email, password }
     const user = await prisma.users.create({
         data: {
             fullName,
-            username,
             email,
             password: hashedPassword,
+            username,
         },
     });
 
     return user;
+}
 
-})
-
-const loginUser = asyncHandler(async ({ email, password }) => {
+const loginUser = async ({ email, password }) => {
     const user = await prisma.users.findUnique({
         where: {
             email,
@@ -51,7 +49,7 @@ const loginUser = asyncHandler(async ({ email, password }) => {
 
     return user
 
-})
+}
 
 
 

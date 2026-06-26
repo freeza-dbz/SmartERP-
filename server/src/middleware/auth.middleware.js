@@ -1,24 +1,20 @@
 import jwt from "jsonwebtoken"
-import { asyncHandler } from "../utils/asyncHandler"
-import { ApiError } from "../utils/ApiErrors"
-import { ApiResponse } from "../utils/ApiResponse"
+import { asyncHandler } from "../utils/asyncHandler.js"
+import { ApiError } from "../utils/ApiErrors.js"
 
-const verifyJWT = asyncHandler(async (req, res) => {
+const verifyJWT = asyncHandler(async (req, _, next) => {
     try {
-        const authHeader = req.headers.authorization;
+        const authHeader = req.headers.authorization || req.headers.Authorization;
 
-        if (!authHeader) {
-            return res
-                .status(401)
-                .json(
-                    ApiError(
-                        401,
-                        "Unauthorized Request"
-                    )
-                );
+        if (!authHeader?.startsWith("Bearer ")) {
+            throw new ApiError(401, "Unauthorized Request");
         }
 
         const token = authHeader.split(" ")[1];
+
+        if (!token) {
+            throw new ApiError(401, "Unauthorized request, token is missing");
+        }
 
         const decoded = jwt.verify(
             token,
@@ -29,6 +25,8 @@ const verifyJWT = asyncHandler(async (req, res) => {
 
         next();
     } catch (error) {
-        return ApiError(401, "Invalid Token")
+        throw new ApiError(401, error?.message || "Invalid Token");
     }
 })
+
+export default verifyJWT;
