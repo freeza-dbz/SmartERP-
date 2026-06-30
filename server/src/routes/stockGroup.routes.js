@@ -1,12 +1,12 @@
 import { Router } from "express"
-const {
+import {
   createStockGroup,
   getStockGroups,
-} = require('../controllers/stockGroupController.js');
+} from "../controllers/stockGroup.controller.js"
 
 const router = Router();
 
 router.post('/groups', createStockGroup);
 router.get('/groups', getStockGroups);
 
-module.exports = router;
+export default router;

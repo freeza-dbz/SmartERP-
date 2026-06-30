@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt"
-import { prisma } from "../db/index.js"
+import { PrismaClient } from "@prisma/client"
 import { ApiError } from "../utils/ApiErrors.js"
+
+const prisma = new PrismaClient()
 
 const registerUser = async ({ fullName, username, email, password }) => {
     const existingUser = await prisma.users.findUnique({

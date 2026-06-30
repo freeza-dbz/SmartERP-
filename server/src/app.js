@@ -22,10 +22,18 @@ app.use(cookieParser());
 // Routes import 
 import userRoutes from "./routes/user.routes.js"
 import companyRoutes from "./routes/company.routes.js"
+import ledgerRoutes from "./routes/ledger.routes.js"
+import stockGroupRoutes from "./routes/stockGroup.routes.js"
+import unitRoutes from "./routes/unit.routes.js"
+import stockItemRoutes from "./routes/stockItem.routes.js"
 
 //Routes declaration
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/company", companyRoutes);
+app.use("/api/v1/ledgers", ledgerRoutes);
+app.use("/api/v1/stock-groups", stockGroupRoutes);
+app.use("/api/v1/units", unitRoutes);
+app.use("/api/v1/items", stockItemRoutes);
 
 
 export { app };

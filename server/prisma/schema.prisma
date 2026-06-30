@@ -109,28 +109,29 @@ model StockGroup {
 model StockItem {
   id            Int            @id @default(autoincrement())
   companyId     Int
-  groupId       Int?
-  unitId        Int?
-  itemName      String         @db.VarChar(255)
+  name          String
   sku           String?        @db.VarChar(100)
-  purchasePrice Decimal?       @db.Decimal(12, 2)
-  sellingPrice  Decimal?       @db.Decimal(12, 2)
-  gstPercent    Decimal?       @db.Decimal(5, 2)
-  openingStock  Decimal?       @default(0) @db.Decimal(12, 2)
-  currentStock  Decimal?       @default(0) @db.Decimal(12, 2)
+  purchasePrice Decimal        @default(0) @db.Decimal(12, 2)
+  sellingPrice  Decimal        @default(0) @db.Decimal(12, 2)
+  gstRate       Int            @default(0) // Store as a whole number, e.g., 18 for 18%
+  openingStock  Decimal        @default(0) @db.Decimal(12, 2)
+  currentStock  Decimal        @default(0) @db.Decimal(12, 2)
+  unitId        Int
+  unit          Unit           @relation(fields: [unitId], references: [id])
+  groupId       Int
+  stockGroup    StockGroup     @relation(fields: [groupId], references: [id])
   purchaseItems PurchaseItem[]
   salesItems    SalesItem[]
-  company       Company        @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  stockGroup    StockGroup?    @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  unit          Unit?          @relation(fields: [unitId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  company       Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
 model Unit {
   id         Int         @id @default(autoincrement())
   companyId  Int
-  unitName   String      @db.VarChar(20)
+  name       String // e.g., "Pieces"
+  shortName  String // e.g., "PCS"
   stockItems StockItem[]
-  company    Company     @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  company    Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
 model User {

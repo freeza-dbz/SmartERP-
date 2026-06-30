@@ -1,14 +1,14 @@
 import { Router } from "express"
-const {
+import  {
   createLedger,
   getLedgers,
   updateLedger,
-} = require('../controllers/ledger.controller.js');
+} from "../controllers/ledger.controller.js"
 
 const router = Router();
 
-router.post('/ledgers', createLedger);
-router.get('/ledgers', getLedgers);
-router.put('/ledgers/:id', updateLedger);
+router.post('/createLedgers', createLedger);
+router.get('/fetchLedgers', getLedgers);
+router.put('/updateLedgers/:id', updateLedger);
 
-module.exports = router;
+export default router;
